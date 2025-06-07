@@ -51,11 +51,7 @@ def onAccelerationChange(self, acceleration, timestamp):
     timestamps.append(ts)
     temperature_vals.append(temp)
 
-    x_mean.append(((x_mean[-1]*(len(x_vals)-1))+x_vals[-1])/len(x_vals))
-    y_mean.append(((y_mean[-1]*(len(y_vals)-1))+y_vals[-1])/len(y_vals))
-    z_mean.append(((z_mean[-1]*(len(z_vals)-1))+z_vals[-1])/len(z_vals))
-    norm.append(np.sqrt(x_mean[-1]**2 + y_mean[-1]**2 + z_mean[-1]**2))
-
+    
     # Trim to last 100 points
     if len(x_vals) > 100:
         x_vals.pop(0)
@@ -63,11 +59,7 @@ def onAccelerationChange(self, acceleration, timestamp):
         z_vals.pop(0)
         temperature_vals.pop(0)
         timestamps.pop(0)
-        x_mean.pop(0)
-        y_mean.pop(0)
-        z_mean.pop(0)
-        norm.pop(0)
-
+    
     csv_writer.writerow([ts, x, y, z, temp])
 
 def onTemperatureChange(self, temperature):
@@ -118,21 +110,6 @@ def animate(i):
     ax[1].set_title("Temperature")
     ax[1].legend()
     ax[1].grid(True)
-'''
-    ax[2].clear()
-    ax[2].plot(x_mean, label='X Mean')
-    ax[2].plot(y_mean, label='Y Mean')
-    ax[2].plot(z_mean, label='Z Mean')
-    ax[2].set_title("Accelerometer Mean")
-    ax[2].legend()
-    ax[2].grid(True)
-
-    ax[3].clear()
-    ax[3].plot(norm, label='Norm', color='purple')
-    ax[3].set_title("Accelerometer Norm")
-    ax[3].legend()
-    ax[3].grid(True)
-'''
 # --- Start Live Plot ---
 ani = animation.FuncAnimation(fig, animate, interval=500, cache_frame_data=False)
 sys.modules[__name__].ani = ani  # Prevent garbage collection
